@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class InsertReservasiViewModel(
     private val reservasiRepository: ReservasiRepository,
-    private val villaRepository: VillaRepository,
+    val villaRepository: VillaRepository,
     private val pelangganRepository: PelangganRepository
 ) : ViewModel() {
     var uiReservasiState by mutableStateOf(InsertReservasiUiState())
@@ -50,14 +50,26 @@ class InsertReservasiViewModel(
         uiReservasiState = InsertReservasiUiState(insertReservasiUiEvent = insertReservasiUiEvent)
     }
 
-    fun insertReservasi() {
-        isLoading = true
-        errorMessage = null
+    suspend fun insertReservasi(navigateBack: () -> Unit) {
         viewModelScope.launch {
             try {
-                reservasiRepository.insertReservasi(uiReservasiState.insertReservasiUiEvent.toReservasi())
+                val selectedVilla = villaNames.find { it.idVilla == uiReservasiState.insertReservasiUiEvent.idvilla }
+                if (selectedVilla != null) {
+                    val villaDetail = villaRepository.getVillaById(selectedVilla.idVilla)
+                    val availableRooms = villaDetail.data.kamarTersedia
+                    if (availableRooms >= uiReservasiState.insertReservasiUiEvent.jumlahKamar) {
+                        reservasiRepository.insertReservasi(uiReservasiState.insertReservasiUiEvent.toReservasi())
+                        uiReservasiState = uiReservasiState.copy(isSuccess = true)
+                        navigateBack()
+                    } else {
+                        errorMessage = "Maaf, hanya tersedia $availableRooms kamar saat ini."
+                    }
+                } else {
+                    errorMessage = "Villa tidak ditemukan."
+                }
             } catch (e: Exception) {
-                errorMessage = "Gagal memasukkan reservasi: ${e.message}"
+                e.printStackTrace()
+                errorMessage = "Terjadi kesalahan. Silakan coba lagi."
             } finally {
                 isLoading = false
             }
@@ -67,6 +79,7 @@ class InsertReservasiViewModel(
 
 data class InsertReservasiUiState(
     val insertReservasiUiEvent: InsertReservasiUiEvent = InsertReservasiUiEvent(),
+    val isSuccess: Boolean = false
 )
 
 data class InsertReservasiUiEvent(
