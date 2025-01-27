@@ -38,8 +38,8 @@ import com.example.myapplication.ui.view.reservasi.DetailReservasiScreen
 import com.example.myapplication.ui.view.reservasi.UpdateReservasiScreen
 import com.example.myapplication.ui.view.review.DestinasiDetailReview
 import com.example.myapplication.ui.view.review.DestinasiInsertReview
-import com.example.myapplication.ui.view.review.DetailReviewScreen
 import com.example.myapplication.ui.view.review.InsertReviewView
+import com.example.myapplication.ui.view.review.UpdateReviewScreen
 
 @Composable
 fun PengelolaHalaman(navController: NavHostController = rememberNavController()) {
@@ -235,7 +235,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         ){
             val idReview = it.arguments?.getInt(DestinasiDetailReview.IDREVIEW)
             idReview?.let { idReview ->
-                DetailReviewScreen(
+                UpdateReviewScreen(
                     onBack = {navController.navigateUp()},
                     onNavigate = {navController.navigateUp()}
                 )
