@@ -149,6 +149,10 @@ fun ReservasiCard(
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
+                    text = "ID: ${reservasiItem.idReservasi}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
                     text = villaName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
@@ -159,6 +163,10 @@ fun ReservasiCard(
                 )
                 Text(
                     text = "Tanggal: ${reservasiItem.checkOut}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "Jumlah Kamar: ${reservasiItem.jumlahKamar}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
