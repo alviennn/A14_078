@@ -42,7 +42,10 @@ import com.example.myapplication.ui.view.review.InsertReviewView
 import com.example.myapplication.ui.view.review.UpdateReviewScreen
 
 @Composable
-fun PengelolaHalaman(navController: NavHostController = rememberNavController()) {
+fun PengelolaHalaman(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+) {
     NavHost(
         navController = navController,
         startDestination = DestinasiHome.route,
